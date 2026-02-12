@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ControlCampus.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,16 @@ var connectionString = builder.Configuration.GetConnectionString("querySql");
 // 2. Registrar el DbContext (Connection) para que esté disponible en todo el proyecto
 builder.Services.AddDbContext<Connection>(options =>
     options.UseSqlServer(connectionString));
+
+// Configuración de Autenticación por Cookies
+builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Ruta a la que redirige si no está logueado
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Ruta si no tiene permisos
+        options.ExpireTimeSpan = TimeSpan.FromHours(8); // Duración de la sesión
+    });
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -27,6 +38,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

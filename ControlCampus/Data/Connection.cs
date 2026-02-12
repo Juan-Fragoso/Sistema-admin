@@ -26,6 +26,19 @@ namespace ControlCampus.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Configuramos la tabla Grade para evitar ciclos de cascada
+            modelBuilder.Entity<Grade>()
+                .HasOne(g => g.Teacher)
+                .WithMany() // O la colección si la tienes en Teacher
+                .HasForeignKey(g => g.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict); // <--- ESTO ROMPE EL CICLO
+
+            modelBuilder.Entity<Grade>()
+                .HasOne(g => g.Subject)
+                .WithMany()
+                .HasForeignKey(g => g.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict); // <--- TAMBIÉN AQUÍ POR SEGURIDAD
         }
     }
 }
