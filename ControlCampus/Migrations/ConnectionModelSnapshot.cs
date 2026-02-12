@@ -185,12 +185,7 @@ namespace ControlCampus.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Role");
 
@@ -223,13 +218,13 @@ namespace ControlCampus.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("UserId")
@@ -237,7 +232,21 @@ namespace ControlCampus.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RoleId = 1L,
+                            UpdatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("ControlCampus.Models.Student", b =>
@@ -367,7 +376,7 @@ namespace ControlCampus.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -382,12 +391,23 @@ namespace ControlCampus.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@campus.com",
+                            Name = "Administrador",
+                            Password = "$2a$11$SAZGNCx7o8A2IjWfJEBbwORDzAtvmV5qNiNyBe/nacO5X77lR3ikO",
+                            UpdatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("ControlCampus.Models.CourseAssignment", b =>
@@ -463,11 +483,23 @@ namespace ControlCampus.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("ControlCampus.Models.Role", b =>
+            modelBuilder.Entity("ControlCampus.Models.RoleUser", b =>
                 {
-                    b.HasOne("ControlCampus.Models.User", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId");
+                    b.HasOne("ControlCampus.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlCampus.Models.User", "User")
+                        .WithMany("RoleUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ControlCampus.Models.Student", b =>
@@ -494,7 +526,7 @@ namespace ControlCampus.Migrations
 
             modelBuilder.Entity("ControlCampus.Models.User", b =>
                 {
-                    b.Navigation("Roles");
+                    b.Navigation("RoleUsers");
 
                     b.Navigation("Student");
 

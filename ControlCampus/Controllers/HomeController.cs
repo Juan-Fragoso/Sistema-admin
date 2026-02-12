@@ -40,7 +40,7 @@ namespace ControlCampus.Controllers
             {
                 Name = "Administrador",
                 Email = "admin@campus.com",
-                Password = BCrypt.Net.BCrypt.HashPassword("123456"),
+                Password = BCrypt.Net.BCrypt.HashPassword("admin123"),
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };  

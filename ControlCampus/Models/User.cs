@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControlCampus.Models
 {
@@ -11,8 +12,10 @@ namespace ControlCampus.Models
         [Required]
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt {  get; set; } = DateTime.Now;
+       
+        public DateTime? CreatedAt { get; set; }
+       
+        public DateTime? UpdatedAt {  get; set; }
 
         public virtual Student? Student { get; set; }
 

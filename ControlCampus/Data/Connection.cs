@@ -65,6 +65,34 @@ namespace ControlCampus.Data
                 new Group { Id = 5, Name = "Grupo E", Period = "2026-1" }
             );
 
+            var fechaFija = new DateTime(2026, 01, 12);
+
+            // Este es el hash de "admin123" generado previamente. 
+            // Al ser un string fijo, EF ya no dará error de "modelo dinámico".
+            string staticHash = "$2a$11$SAZGNCx7o8A2IjWfJEBbwORDzAtvmV5qNiNyBe/nacO5X77lR3ikO";
+
+            // Insert en la tabla de Usuarios
+            modelBuilder.Entity<User>().HasData(new
+            {
+                Id = (long)1,
+                Name = "Administrador",
+                Email = "admin@campus.com",
+                Password = staticHash,
+                CreatedAt = (DateTime?)fechaFija,
+                UpdatedAt = (DateTime?)fechaFija
+            });
+
+            // Insert en la tabla intermedia (RoleUser)
+            // Usamos un objeto anónimo para evitar validaciones de navegación
+            modelBuilder.Entity<RoleUser>().HasData(new
+            {
+                Id = (long)1,
+                UserId = (long)1,
+                RoleId = (long)1,
+                CreatedAt = (DateTime?)fechaFija,
+                UpdatedAt = (DateTime?)fechaFija
+            });
+
         }
     }
 }

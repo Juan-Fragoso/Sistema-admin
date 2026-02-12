@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ControlCampus.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSystemSetup : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,19 +28,17 @@ namespace ControlCampus.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleUser",
+                name: "Role",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    RoleId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleUser", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,8 +65,8 @@ namespace ControlCampus.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,23 +74,31 @@ namespace ControlCampus.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "RoleUser",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<long>(type: "bigint", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_RoleUser", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Role_User_UserId",
+                        name: "FK_RoleUser_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleUser_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,12 +258,12 @@ namespace ControlCampus.Migrations
 
             migrationBuilder.InsertData(
                 table: "Role",
-                columns: new[] { "Id", "Description", "Name", "UserId" },
+                columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 1L, "Administrador del sistema", "admin", null },
-                    { 2L, "Cliente del sistema", "student", null },
-                    { 3L, "Docente del sistema", "teacher", null }
+                    { 1L, "Administrador del sistema", "admin" },
+                    { 2L, "Cliente del sistema", "student" },
+                    { 3L, "Docente del sistema", "teacher" }
                 });
 
             migrationBuilder.InsertData(
@@ -271,6 +277,16 @@ namespace ControlCampus.Migrations
                     { 4L, "NAT", null, "Ciencias Naturales" },
                     { 5L, "FIS", null, "Educación Física" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "CreatedAt", "Email", "Name", "Password", "UpdatedAt" },
+                values: new object[] { 1L, new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@campus.com", "Administrador", "$2a$11$SAZGNCx7o8A2IjWfJEBbwORDzAtvmV5qNiNyBe/nacO5X77lR3ikO", new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+
+            migrationBuilder.InsertData(
+                table: "RoleUser",
+                columns: new[] { "Id", "CreatedAt", "RoleId", "UpdatedAt", "UserId" },
+                values: new object[] { 1L, new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseAssignment_GroupId",
@@ -313,8 +329,13 @@ namespace ControlCampus.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Role_UserId",
-                table: "Role",
+                name: "IX_RoleUser_RoleId",
+                table: "RoleUser",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleUser_UserId",
+                table: "RoleUser",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -340,9 +361,6 @@ namespace ControlCampus.Migrations
                 name: "Grade");
 
             migrationBuilder.DropTable(
-                name: "Role");
-
-            migrationBuilder.DropTable(
                 name: "RoleUser");
 
             migrationBuilder.DropTable(
@@ -353,6 +371,9 @@ namespace ControlCampus.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teacher");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Group");
