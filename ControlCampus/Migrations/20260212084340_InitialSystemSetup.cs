@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ControlCampus.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialSystemSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -234,6 +236,40 @@ namespace ControlCampus.Migrations
                         principalTable: "Teacher",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Group",
+                columns: new[] { "Id", "Name", "Period" },
+                values: new object[,]
+                {
+                    { 1L, "Grupo A", "2026-1" },
+                    { 2L, "Grupo B", "2026-1" },
+                    { 3L, "Grupo C", "2026-1" },
+                    { 4L, "Grupo D", "2026-1" },
+                    { 5L, "Grupo E", "2026-1" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "Id", "Description", "Name", "UserId" },
+                values: new object[,]
+                {
+                    { 1L, "Administrador del sistema", "admin", null },
+                    { 2L, "Cliente del sistema", "student", null },
+                    { 3L, "Docente del sistema", "teacher", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Subject",
+                columns: new[] { "Id", "Code", "Credits", "Name" },
+                values: new object[,]
+                {
+                    { 1L, "MAT", null, "Matemáticas" },
+                    { 2L, "LEN", null, "Lengua y Literatura" },
+                    { 3L, "SOC", null, "Ciencias Sociales" },
+                    { 4L, "NAT", null, "Ciencias Naturales" },
+                    { 5L, "FIS", null, "Educación Física" }
                 });
 
             migrationBuilder.CreateIndex(

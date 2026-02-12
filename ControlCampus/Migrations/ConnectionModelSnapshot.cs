@@ -136,6 +136,38 @@ namespace ControlCampus.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Group");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Grupo A",
+                            Period = "2026-1"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Grupo B",
+                            Period = "2026-1"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Grupo C",
+                            Period = "2026-1"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Name = "Grupo D",
+                            Period = "2026-1"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Name = "Grupo E",
+                            Period = "2026-1"
+                        });
                 });
 
             modelBuilder.Entity("ControlCampus.Models.Role", b =>
@@ -161,6 +193,26 @@ namespace ControlCampus.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Description = "Administrador del sistema",
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Description = "Cliente del sistema",
+                            Name = "student"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Description = "Docente del sistema",
+                            Name = "teacher"
+                        });
                 });
 
             modelBuilder.Entity("ControlCampus.Models.RoleUser", b =>
@@ -242,6 +294,38 @@ namespace ControlCampus.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subject");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "MAT",
+                            Name = "Matemáticas"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "LEN",
+                            Name = "Lengua y Literatura"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "SOC",
+                            Name = "Ciencias Sociales"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Code = "NAT",
+                            Name = "Ciencias Naturales"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Code = "FIS",
+                            Name = "Educación Física"
+                        });
                 });
 
             modelBuilder.Entity("ControlCampus.Models.Teacher", b =>

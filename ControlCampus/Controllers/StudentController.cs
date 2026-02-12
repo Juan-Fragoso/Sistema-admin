@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ControlCampus.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlCampus.Controllers
 {
+    [Authorize]
     public class StudentController : Controller
     {
         private const string V = "student";

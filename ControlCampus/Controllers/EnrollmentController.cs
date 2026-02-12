@@ -2,9 +2,11 @@
 using ControlCampus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlCampus.Controllers
 {
+    [Authorize]
     public class EnrollmentController : Controller
     {
         private Connection _context;
