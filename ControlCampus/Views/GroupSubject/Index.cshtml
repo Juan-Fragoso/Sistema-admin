@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<ControlCampus.Models.CourseAssignment>
+
+<table class="table table-striped table-hover border">
+    <thead class="table-dark">
+        <tr>
+            <th>Materia</th>
+            <th>Grupo</th>
+            <th>Acccion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var courseAssignment in Model)
+            {
+                <tr>
+                    <td>@courseAssignment.Subject?.Name</td>
+                    @* Accedemos a los datos de la relación User *@
+                    <td>@courseAssignment.Group?.Name</td>
+                    <td>
+                        <a asp-action="ReadCourseAssignment" asp-route-id="@courseAssignment.Id" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil"></i> Ingresar Calificaciones
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">
+                    No se encontraron datos
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
