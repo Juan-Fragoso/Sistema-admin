@@ -23,23 +23,28 @@ namespace ControlCampus.Controllers
         {
             // 1. Buscar al usuario y cargar sus roles
             var user = await _context.User
-                .Include(u => u.Roles)
+                .Include(u => u.RoleUsers)          // Entramos a la tabla intermedia
+                    .ThenInclude(ru => ru.Role)     // De ahí saltamos a la tabla Role
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 // 2. Crear la "Identidad" del usuario (Claims)
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim("FullName", user.Name),
-                new Claim("UserId", user.Id.ToString())
-            };
-
-                // Agregamos los roles para poder usar [Authorize(Roles="admin")]
-                foreach (var role in user.Roles)
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim("FullName", user.Name),
+                    new Claim("UserId", user.Id.ToString())
+                };
+
+            
+                // Recorremos la tabla intermedia para sacar los nombres de los roles
+                foreach (var ru in user.RoleUsers)
+                {
+                    if (ru.Role != null)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, ru.Role.Name));
+                    }
                 }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

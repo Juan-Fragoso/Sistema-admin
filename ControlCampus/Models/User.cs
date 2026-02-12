@@ -20,14 +20,13 @@ namespace ControlCampus.Models
         public virtual Teacher? Teacher { get; set; }
 
         // Relación con Roles
-        public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+        public virtual ICollection<RoleUser> RoleUsers { get; set; } = new List<RoleUser>();
 
         // 3. Método isAdmin() equivalente
-        // Usamos LINQ para buscar dentro de la colección de Roles
+        // Y tu función IsAdmin debe cambiar para buscar a través de esa tabla:
         public bool IsAdmin()
         {
-            return Roles != null && Roles.Any(r => r.Name == "admin");
+            return RoleUsers != null && RoleUsers.Any(ru => ru.Role?.Name == "admin");
         }
-
     }
 }

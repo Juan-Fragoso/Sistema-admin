@@ -21,5 +21,9 @@ namespace ControlCampus.Models
         public virtual Subject Subject { get; set; } = null!;
         [ForeignKey("TeacherId")]
         public virtual Teacher Teacher { get; set; } = null!;
+        [NotMapped]
+        public DateTime CreatedAt { get; set; }
+        [NotMapped]
+        public DateTime UpdatedAt { get; set; }
     }
 }

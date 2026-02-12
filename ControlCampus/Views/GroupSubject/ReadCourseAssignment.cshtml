@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewData["Title"] = "ReadCourseAssignment";
+}
+
+@using ControlCampus.Models.ViewModels
+
+<div class="container">
+    <h2>@Model.CourseAssignment.Subject.Name - @Model.CourseAssignment.Group.Name</h2>
+    <hr />
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form asp-action="ReadCourseAssignment" method="get" class="row g-3">
+                <input type="hidden" name="id" value="@Model.CourseAssignment.Id" />
+                <div class="col-auto">
+                    <input type="text" name="boleta" class="form-control" placeholder="Ingrese Boleta" value="@Model.Boleta">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Buscar Alumno</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Boleta))
+    {
+        @if (Model.Student == null)
+        {
+            <div class="alert alert-warning">Estudiante no encontrado.</div>
+        }
+        else if (Model.Enrollment == null)
+        {
+            <div class="alert alert-danger">El estudiante <b>@Model.Student.User.Name</b> no está inscrito en este grupo.</div>
+        }
+        else
+        {
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">Ingresar Calificación para: @Model.Student.User.Name</div>
+                <div class="card-body">
+                    <form asp-action="SaveGrade" method="post">
+                        <input type="hidden" name="EnrollmentId" value="@Model.Enrollment.Id" />
+                        <input type="hidden" name="SubjectId" value="@Model.CourseAssignment.SubjectId" />
+                        <input type="hidden" name="AssignmentId" value="@Model.CourseAssignment.Id" />
+
+                        <div class="mb-3">
+                            <input type="number" name="Score" class="form-control"
+                                   value="@(Model.Grade?.GradeValue ?? 0)"
+                                   step="0.01" min="0" max="10" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Guardar Calificación</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>

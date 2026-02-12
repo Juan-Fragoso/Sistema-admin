@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @using ControlCampus.Extensions
 </head>
 <body>
     <header>
@@ -23,38 +24,52 @@
                     <ul class="navbar-nav me-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" id="acadDrop" role="button" data-bs-toggle="dropdown">
-                                    Académico
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="Student" asp-action="Index">Estudiantes</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Teacher" asp-action="Index">Docentes</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Subject" asp-action="Index">Materias</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Group" asp-action="Index">Grupos</a></li>
-                                </ul>
-                            </li>
+                            @if (User.IsAdmin())
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" id="acadDrop" role="button" data-bs-toggle="dropdown">
+                                        Académico
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="Student" asp-action="Index">Estudiantes</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Teacher" asp-action="Index">Docentes</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Subject" asp-action="Index">Materias</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Group" asp-action="Index">Grupos</a></li>
+                                    </ul>
+                                </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" id="operDrop" role="button" data-bs-toggle="dropdown">
-                                    Operaciones
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="Enrollment" asp-action="Index">Inscripciones</a></li>
-                                    <li><a class="dropdown-item" asp-controller="TeacherAssignment" asp-action="Index">Asignación Profesores</a></li>
-                                    <li><a class="dropdown-item" asp-controller="GroupSubject" asp-action="Index">Grupos/Materias</a></li>
-                                </ul>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" id="operDrop" role="button" data-bs-toggle="dropdown">
+                                        Operaciones
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="Enrollment" asp-action="Index">Inscripciones</a></li>
+                                        <li><a class="dropdown-item" asp-controller="TeacherAssignment" asp-action="Index">Asignación Profesores</a></li>
+                                    </ul>
+                                </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" id="configDrop" role="button" data-bs-toggle="dropdown">
-                                    Sistema
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Usuarios</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Role" asp-action="Index">Roles</a></li>
-                                </ul>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" id="configDrop" role="button" data-bs-toggle="dropdown">
+                                        Sistema
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Usuarios</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Role" asp-action="Index">Roles</a></li>
+                                    </ul>
+                                </li>
+                            }         
+                            
+                            @if (User.IsTeacher())
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" id="operDrop" role="button" data-bs-toggle="dropdown">
+                                        Operaciones
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="GroupSubject" asp-action="Index">Grupos/Materias</a></li>
+                                    </ul>
+                                </li>
+                            }
                         }
                     </ul>
 

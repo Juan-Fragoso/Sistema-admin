@@ -1,8 +1,9 @@
 using ControlCampus.Data;
 using ControlCampus.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ControlCampus.Controllers
 {
@@ -44,7 +45,24 @@ namespace ControlCampus.Controllers
                 UpdatedAt = DateTime.Now
             };  
             _context.User.Add(admin);
+
             await _context.SaveChangesAsync();
+
+            var adminRole = await _context.Set<Role>()
+                .AsNoTracking()
+                .Where(r => r.Name == "admin")
+                .Select(r => new { r.Id, r.Name })
+                .FirstOrDefaultAsync();
+
+            _context.RoleUser.Add(new RoleUser
+            {
+                UserId = admin.Id,
+                RoleId = adminRole.Id,
+                CreatedAt = DateTime.Now
+            });
+
+            await _context.SaveChangesAsync();
+
             return "Usuario Creado: admin@campus.com / 123456";
         }
 
