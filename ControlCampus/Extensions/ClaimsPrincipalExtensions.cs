@@ -13,5 +13,10 @@ namespace ControlCampus.Extensions
         {
             return user.IsInRole("teacher");
         }
+
+        public static bool IsStudent(this ClaimsPrincipal user)
+        {
+            return user.IsInRole("student");
+        }
     }
 }

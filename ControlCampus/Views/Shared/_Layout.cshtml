@@ -70,6 +70,13 @@
                                     </ul>
                                 </li>
                             }
+
+                            @if (User.IsStudent())
+                            {
+                                <li class="nav-item">
+                                    <a class="dropdown-item text-white" asp-controller="Student" asp-action="MyGrades">Mis calificaciones</a>
+                                </li>
+                            }                            
                         }
                     </ul>
 

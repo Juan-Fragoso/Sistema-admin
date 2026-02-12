@@ -1,8 +1,9 @@
 ﻿using ControlCampus.Data;
-using Microsoft.AspNetCore.Mvc;
 using ControlCampus.Models;
-using Microsoft.EntityFrameworkCore;
+using ControlCampus.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlCampus.Controllers
 {
@@ -164,6 +165,43 @@ namespace ControlCampus.Controllers
 
             // Retornamos la vista "Create", pero le pasamos el objeto con datos
             return View("Create", student);
+        }
+
+        public async Task<IActionResult> MyGrades()
+        {
+            // 1. Obtener el usuario logueado y su perfil de estudiante
+            var userEmail = User.Identity?.Name;
+            var currentUser = await _context.User
+                .Include(u => u.Student)
+                .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+            if (currentUser?.Student == null)
+            {
+                TempData["Error"] = "No tienes un perfil de estudiante asociado.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // 2. Buscar las notas filtrando por el ID del estudiante en la inscripción
+            // Equivalente al whereHas de Laravel
+            var grades = await _context.Grade
+                .Include(g => g.Subject)
+                .Include(g => g.Enrollment)
+                .Include(g => g.Teacher).ThenInclude(t => t.User) // Para ver quién calificó
+                .Where(g => g.Enrollment.StudentId == currentUser.Student.Id)
+                .ToListAsync();
+
+            // 3. Calcular el promedio (usamos DefaultIfEmpty para evitar errores si no hay notas)
+            decimal average = grades.Any()
+                ? grades.Average(g => g.GradeValue ?? 0)
+                : 0;
+
+            var viewModel = new StudentGradesViewModel
+            {
+                Grades = grades,
+                Average = Math.Round(average, 2) // Redondeamos a 2 decimales
+            };
+
+            return View(viewModel);
         }
     }
 }
