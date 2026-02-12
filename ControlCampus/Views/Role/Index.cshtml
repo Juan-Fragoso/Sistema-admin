@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<ControlCampus.Models.Role>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-shield-lock-fill"></i> Roles del Sistema</h2>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Nombre del Rol</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <i class="bi bi-info-circle fs-2 text-muted"></i>
+                                <p class="mt-2">No hay roles definidos.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var role in Model)
+                        {
+                            <tr>
+                                <td class="text-muted">#@role.Id</td>
+                                <td>
+                                    <span class="badge rounded-pill bg-info text-dark">
+                                        @role.Name.ToUpper()
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (string.IsNullOrEmpty(role.Description))
+                                    {
+                                        <em class="text-muted">Sin descripción disponible</em>
+                                    }
+                                    else
+                                    {
+                                        @role.Description
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

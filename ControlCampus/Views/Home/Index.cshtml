@@ -2,7 +2,65 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 text-center">
+            <div class="mb-4">
+                <i class="bi bi-mortarboard text-primary" style="font-size: 5rem;"></i>
+            </div>
+
+            <h1 class="display-3 fw-bold text-dark">Control <span class="text-primary">Campus</span></h1>
+
+            <hr class="mx-auto border-primary border-2 opacity-50" style="width: 100px;">
+
+            <div class="mt-4">
+                <p class="lead fs-4 text-secondary">
+                    Bienvenido al Sistema Integral de Gestión Académica.
+                </p>
+                <p class="px-lg-5 text-muted">
+                    Nuestra plataforma centraliza el control de materias, evaluaciones y seguimiento estudiantil
+                    para optimizar los procesos educativos de nuestra institución. Explore los módulos
+                    disponibles en la barra de navegación superior según sus privilegios de acceso.
+                </p>
+            </div>
+
+            <div class="mt-5 p-4 bg-light rounded-4 shadow-sm">
+                <figure class="mb-0">
+                    <blockquote class="blockquote">
+                        <p class="fs-5 italic">"La educación es el arma más poderosa que puedes usar para cambiar el mundo."</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer mb-0">
+                        Nelson Mandela
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="mt-5">
+                <small class="text-muted uppercase ls-wider">Versión del Sistema 3.1.0-F</small>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    /* Efecto suave de entrada */
+    .container {
+        animation: fadeIn 1s ease-in;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
