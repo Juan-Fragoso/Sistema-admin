@@ -19,7 +19,6 @@ namespace ControlCampus.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            // Incluimos .Include(s => s.User) para traer el nombre que vive en la tabla User
             var students = await _context.Student
                 .Include(s => s.User)
                 .ToListAsync();
@@ -33,7 +32,6 @@ namespace ControlCampus.Controllers
             return View();
         }
 
-        // 2. Método para procesar los datos
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student, string UserName, string UserEmail, string UserPassword, long? id)
@@ -42,7 +40,6 @@ namespace ControlCampus.Controllers
 
             try
             {
-                // 1. Determinar si es Edición o Creación
                 bool isEditing = id.HasValue && id > 0;
                 Student? existingStudent = null;
                 User? user = null;
@@ -54,7 +51,6 @@ namespace ControlCampus.Controllers
                     user = existingStudent.User;
                 }
 
-                // 2. Validaciones con exclusión (Ignorar el ID actual)
                 // Buscamos si el email existe, pero que no sea el del usuario que estamos editando
                 bool emailExists = await _context.User.AnyAsync(u => u.Email == UserEmail && (!isEditing || u.Id != user.Id));
 
@@ -69,7 +65,6 @@ namespace ControlCampus.Controllers
 
                 if (!ModelState.IsValid) return View(student);
 
-                // 3. Lógica de Usuario (Update o Create)
                 if (!isEditing)
                 {
                     user = new User { CreatedAt = DateTime.Now };
@@ -94,7 +89,6 @@ namespace ControlCampus.Controllers
                     user.Password = BCrypt.Net.BCrypt.HashPassword(UserPassword);
                 }
 
-                // 4. Lógica de Estudiante
                 if (!isEditing)
                 {
                     existingStudent = student;
@@ -109,10 +103,8 @@ namespace ControlCampus.Controllers
                     existingStudent.UpdatedAt = DateTime.Now;
                 }
 
-                // Guardamos cambios principales
                 await _context.SaveChangesAsync();
 
-                // 5.Rol(Solo para nuevos)
                 if (!isEditing)
                 {
                     var studentRole = await _context.Set<Role>()
@@ -153,7 +145,6 @@ namespace ControlCampus.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(long id)
         {
-            // Buscamos al estudiante con sus datos de usuario
             var student = await _context.Student
                 .Include(s => s.User)
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -163,13 +154,11 @@ namespace ControlCampus.Controllers
                 return NotFound();
             }
 
-            // Retornamos la vista "Create", pero le pasamos el objeto con datos
             return View("Create", student);
         }
 
         public async Task<IActionResult> MyGrades()
         {
-            // 1. Obtener el usuario logueado y su perfil de estudiante
             var userEmail = User.Identity?.Name;
             var currentUser = await _context.User
                 .Include(u => u.Student)
@@ -181,16 +170,13 @@ namespace ControlCampus.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // 2. Buscar las notas filtrando por el ID del estudiante en la inscripción
-            // Equivalente al whereHas de Laravel
             var grades = await _context.Grade
                 .Include(g => g.Subject)
                 .Include(g => g.Enrollment)
-                .Include(g => g.Teacher).ThenInclude(t => t.User) // Para ver quién calificó
+                .Include(g => g.Teacher).ThenInclude(t => t.User) 
                 .Where(g => g.Enrollment.StudentId == currentUser.Student.Id)
                 .ToListAsync();
 
-            // 3. Calcular el promedio (usamos DefaultIfEmpty para evitar errores si no hay notas)
             decimal average = grades.Any()
                 ? grades.Average(g => g.GradeValue ?? 0)
                 : 0;
@@ -198,7 +184,7 @@ namespace ControlCampus.Controllers
             var viewModel = new StudentGradesViewModel
             {
                 Grades = grades,
-                Average = Math.Round(average, 2) // Redondeamos a 2 decimales
+                Average = Math.Round(average, 2) 
             };
 
             return View(viewModel);

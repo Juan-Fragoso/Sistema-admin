@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// 1.Obtener el ConnectionString del appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("querySql");
 
 // 2. Registrar el DbContext (Connection) para que esté disponible en todo el proyecto
@@ -18,9 +16,9 @@ builder.Services.AddDbContext<Connection>(options =>
 builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // Ruta a la que redirige si no está logueado
-        options.AccessDeniedPath = "/Account/AccessDenied"; // Ruta si no tiene permisos
-        options.ExpireTimeSpan = TimeSpan.FromHours(8); // Duración de la sesión
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied"; 
+        options.ExpireTimeSpan = TimeSpan.FromHours(8); 
     });
 
 builder.Services.AddControllersWithViews();
@@ -31,7 +29,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

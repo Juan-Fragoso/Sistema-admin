@@ -24,7 +24,6 @@ namespace ControlCampus.Controllers
                 .AsNoTracking()
                 .ToListAsync();
 
-            // 2. Traemos los catálogos para los selects
             ViewBag.Students = await _context.Student
                 .Include(s => s.User)
                 .Select(s => new { Id = s.Id, Name = s.User.Name })

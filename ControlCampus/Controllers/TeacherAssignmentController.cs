@@ -52,7 +52,6 @@ namespace ControlCampus.Controllers
 
                 if (existingAssignment == null)
                 {
-                    // 2. Si no existe, la creamos (El "Create" de updateOrCreate)
                     var newAssignment = new CourseAssignment
                     {
                         TeacherId = TeacherId,
@@ -67,7 +66,7 @@ namespace ControlCampus.Controllers
                 }
                 else
                 {
-                    // Aquí podrías actualizar campos extra si los tuvieras
+              
                     TempData["Info"] = "Esta asignación ya existe.";
                 }
 

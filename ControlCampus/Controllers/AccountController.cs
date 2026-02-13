@@ -21,15 +21,14 @@ namespace ControlCampus.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            // 1. Buscar al usuario y cargar sus roles
+            // Buscar al usuario y cargar sus roles
             var user = await _context.User
-                .Include(u => u.RoleUsers)          // Entramos a la tabla intermedia
-                    .ThenInclude(ru => ru.Role)     // De ahí saltamos a la tabla Role
+                .Include(u => u.RoleUsers)          
+                    .ThenInclude(ru => ru.Role)  
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                // 2. Crear la "Identidad" del usuario (Claims)
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Email),
@@ -49,7 +48,7 @@ namespace ControlCampus.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                // 3. Crear la Cookie de sesión
+                // Crear la Cookie de sesión
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 

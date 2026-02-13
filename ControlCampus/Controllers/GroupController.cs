@@ -15,7 +15,6 @@ namespace ControlCampus.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Consulta simple al catálogo de grupos
             var groups = await _context.Group.ToListAsync();
             return View(groups);
         }

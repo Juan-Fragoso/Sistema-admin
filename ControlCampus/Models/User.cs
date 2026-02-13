@@ -25,8 +25,6 @@ namespace ControlCampus.Models
         // Relación con Roles
         public virtual ICollection<RoleUser> RoleUsers { get; set; } = new List<RoleUser>();
 
-        // 3. Método isAdmin() equivalente
-        // Y tu función IsAdmin debe cambiar para buscar a través de esa tabla:
         public bool IsAdmin()
         {
             return RoleUsers != null && RoleUsers.Any(ru => ru.Role?.Name == "admin");

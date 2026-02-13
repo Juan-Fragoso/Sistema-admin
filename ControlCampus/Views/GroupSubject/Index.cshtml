@@ -21,7 +21,6 @@
             {
                 <tr>
                     <td>@courseAssignment.Subject?.Name</td>
-                    @* Accedemos a los datos de la relación User *@
                     <td>@courseAssignment.Group?.Name</td>
                     <td>
                         <a asp-action="ReadCourseAssignment" asp-route-id="@courseAssignment.Id" class="btn btn-warning btn-sm">

@@ -50,7 +50,7 @@ namespace ControlCampus.Controllers
                     user = existingTeacher.User;
                 }
 
-                // 1. Validaciones de Duplicados (Ignorando el ID actual)
+                // Validaciones de Duplicados (Ignorando el ID actual)
                 bool emailExists = await _context.User.AnyAsync(u => u.Email == UserEmail && (!isEditing || u.Id != user!.Id));
                 bool employeeNumberExists = await _context.Teacher.AnyAsync(t => t.EmployeeNumber == teacher.EmployeeNumber && (!isEditing || t.Id != existingTeacher!.Id));
 
@@ -62,7 +62,6 @@ namespace ControlCampus.Controllers
 
                 if (!ModelState.IsValid) return View(teacher);
 
-                // 2. Lógica de Usuario
                 if (!isEditing)
                 {
                     user = new User { CreatedAt = DateTime.Now };
@@ -78,10 +77,8 @@ namespace ControlCampus.Controllers
                     user.Password = BCrypt.Net.BCrypt.HashPassword(UserPassword);
                 }
 
-                // IMPORTANTE: Guardamos para tener el ID del usuario si es nuevo
                 await _context.SaveChangesAsync();
 
-                // 3. Lógica de Maestro
                 if (!isEditing)
                 {
                     existingTeacher = teacher;
@@ -98,7 +95,6 @@ namespace ControlCampus.Controllers
 
                 await _context.SaveChangesAsync();
 
-                // 4. Asignar Rol de Maestro (Solo si es nuevo)
                 if (!isEditing)
                 {
                     var teacherRole = await _context.Set<Role>().AsNoTracking().Where(r => r.Name == "teacher")
