@@ -22,6 +22,7 @@
                         <th class="text-nowrap" style="width: 80px;">ID</th>
                         <th class="text-nowrap">Nombre del Grupo</th>
                         <th class="text-nowrap">Periodo</th>
+                        <th class="text-nowrap">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +47,11 @@
                                         @(string.IsNullOrEmpty(group.Period) ? "N/A" : group.Period)
                                     </span>
                                 </td>
+                                <th class="text-center">
+                                    <a asp-action="Edit" asp-route-id="@group.Id" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil"></i> <span class="d-none d-md-inline">Editar</span>
+                                    </a>
+                                </th>
                             </tr>
                         }
                     }

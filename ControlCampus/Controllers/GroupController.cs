@@ -76,5 +76,18 @@ namespace ControlCampus.Controllers
                 return View(group);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(long id)
+        {
+            var group = await _context.Group.FirstOrDefaultAsync(g => g.Id == id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            return View("Create", group);
+        }
     }
 }
