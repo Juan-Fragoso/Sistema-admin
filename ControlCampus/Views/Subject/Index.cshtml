@@ -8,6 +8,10 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="h4 mb-0"><i class="bi bi-book text-primary"></i> <span class="d-none d-sm-inline">Catálogo de</span> Materias</h2>
+
+        <a asp-action="Create" class="btn btn-success btn-sm btn-md-normal">
+            <i class="bi bi-plus-lg"></i> <span class="d-none d-sm-inline">Registrar Materia</span>
+        </a>
     </div>
 
     <div class="card shadow-sm border-0">
@@ -18,6 +22,7 @@
                         <th class="text-nowrap" style="width: 80px;">ID</th>
                         <th class="text-nowrap">Código</th>
                         <th class="text-nowrap">Nombre de la Materia</th>
+                        <th class="text-nowrap text-center">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +38,11 @@
                                     </span>
                                 </td>
                                 <td class="fw-bold text-dark">@item.Name</td>
+                                <th class="text-center">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-square"></i> <span class="d-none d-md-inline">Editar</span>
+                                    </a>
+                                </th>
                             </tr>
                         }
                     }
