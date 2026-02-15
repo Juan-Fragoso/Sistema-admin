@@ -13,4 +13,4 @@ Frontend: Razor Pages, HTML5, CSS3 y Bootstrap 5.
 Base de Datos: Microsoft SQL Server.
 
 ## 🔗 Project Demo
-[Visit MS Shop](https://jf.somee.com/Account/Login?ReturnUrl=%2F)
+[Visit Control Campus](https://jf.somee.com/Account/Login?ReturnUrl=%2F)
