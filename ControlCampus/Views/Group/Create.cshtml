@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model ControlCampus.Models.Group
+
+<div class="container mt-4">
+    <h2>@(Model?.Id > 0 ? "Editar Grupo" : "Registrar Grupo")</h2>
+    <hr />
+
+    <form asp-action="Create" method="post">
+
+        <input type="hidden" asp-for="Id" value="@(Model?.Id ?? 0)" />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label">Nombre del Grupo</label>
+                    <input asp-for="Name" class="form-control" required />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="Period" class="control-label">Periodo</label>
+                    <input asp-for="Period" class="form-control" />
+                </div>
+            </div>
+        </div>
+   
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">
+                @(Model?.Id > 0 ? "Actualizar Cambios" : "Guardar Registro")
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
