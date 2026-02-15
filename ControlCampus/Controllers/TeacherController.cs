@@ -60,6 +60,12 @@ namespace ControlCampus.Controllers
                 // Quitamos la validación automática de la navegación para que no bloquee
                 ModelState.Remove("User");
 
+                // Si estamos editando la contraseña no es requerida
+                if (isEditing && string.IsNullOrEmpty(UserPassword))
+                {
+                    ModelState.Remove("UserPassword");
+                }
+
                 if (!ModelState.IsValid) return View(teacher);
 
                 if (!isEditing)

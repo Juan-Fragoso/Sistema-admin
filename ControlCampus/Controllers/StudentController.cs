@@ -63,6 +63,12 @@ namespace ControlCampus.Controllers
 
                 ModelState.Remove("User");
 
+                // Si estamos editando la contraseña no es requerida
+                if (isEditing && string.IsNullOrEmpty(UserPassword))
+                {
+                    ModelState.Remove("UserPassword");
+                }
+
                 if (!ModelState.IsValid) return View(student);
 
                 if (!isEditing)
@@ -75,9 +81,14 @@ namespace ControlCampus.Controllers
                 {
                     Name = UserName,
                     Email = UserEmail,
-                    Password = BCrypt.Net.BCrypt.HashPassword(UserPassword),
                     CreatedAt = DateTime.Now,
                 };
+
+
+                if (!string.IsNullOrEmpty(UserPassword))
+                {
+                    newUser.Password = BCrypt.Net.BCrypt.HashPassword(UserPassword);
+                }
 
                 user.Name = UserName;
                 user.Email = UserEmail;

@@ -42,7 +42,7 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label class="control-label">Contraseña</label>
-                    <input name="UserPassword" type="password" class="form-control" required />
+                    <input name="UserPassword" type="password" class="form-control" @(Model?.Id > 0 ? "" : "required") />
                 </div>
             </div>
         </div>
