@@ -72,7 +72,7 @@ namespace ControlCampus.Controllers
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                ModelState.AddModelError("", "Ocurrió inesperado " + ex.Message);
+                ModelState.AddModelError("", "Ocurrió un error inesperado " + ex.Message);
                 return View(group);
             }
         }
